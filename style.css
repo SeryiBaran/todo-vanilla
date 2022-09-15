@@ -20,19 +20,22 @@ button:focus {
 .controls {
   margin: 0 auto;
   display: flex;
-  gap: 1rem;
   max-width: 50rem;
-  width: 100%;
-}
-
-.controls__input {
   width: 100%;
 }
 
 .controls__input,
 .controls__submit-btn {
   padding: 1rem;
-  background-color: #f0f3ff;
+}
+
+.controls__input {
+  width: 100%;
+  background-color: #d6deff;
+}
+
+.controls__submit-btn {
+  background-color: #99adff;
 }
 
 .todos {
@@ -52,11 +55,16 @@ button:focus {
 
 .todo p {
   word-wrap: break-word;
-  /*width: 90%;*/
 }
 
 .todo__close-btn {
   background-color: #e8e8e8;
   height: 3rem;
   cursor: pointer;
+}
+
+@media (max-width: 480px) {
+  .controls {
+    flex-direction: column;
+  }
 }
