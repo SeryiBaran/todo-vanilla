@@ -1,0 +1,54 @@
+.wrapper {
+  max-width: 100rem;
+  margin: 0 auto;
+  padding: 1rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+input:focus,
+button:focus {
+  outline: 0.1rem #8aa1ff solid;
+}
+
+.controls {
+  margin: 0 auto;
+  display: flex;
+  gap: 1rem;
+  max-width: 500px;
+  width: 100%;
+}
+
+.controls__input {
+  width: 100%;
+}
+
+.controls__input,
+.controls__submit-btn {
+  padding: 1rem;
+  background-color: #f0f3ff;
+}
+
+.todos {
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.todo {
+  padding: 1rem;
+  background-color: #d4d4d4;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+.todo__close-btn {
+  background-color: #E8E8E8;
+  height: 3rem;
+  width: 3rem;
+  cursor: pointer;
+}
