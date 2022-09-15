@@ -43,12 +43,16 @@ button:focus {
   background-color: #d4d4d4;
   display: flex;
   gap: 1rem;
-  justify-content: space-between;
+  flex-direction: column;
+}
+
+.todo p {
+  word-wrap: break-word;
+  /*width: 90%;*/
 }
 
 .todo__close-btn {
-  background-color: #E8E8E8;
+  background-color: #e8e8e8;
   height: 3rem;
-  width: 3rem;
   cursor: pointer;
 }

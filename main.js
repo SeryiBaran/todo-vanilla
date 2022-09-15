@@ -25,15 +25,12 @@ function removeTodo(e) {
 
 function renderTodos() {
   todosContainer.innerHTML = "";
-  todos
-    .slice()
-    .reverse()
-    .forEach((todo) => {
-      todosContainer.innerHTML += `<div class="todo" id="${todo[0]}">
-          ${todo[1]}
-          <button class="todo__close-btn">X</button>
-        </div>`;
-    });
+  todos.forEach((todo) => {
+    todosContainer.insertAdjacentHTML('afterbegin', `<div class="todo" id="${todo[0]}">
+          <button class="todo__close-btn">Удалить</button>
+          <p>${todo[1]}</p>
+        </div>`);
+  });
 
   document.querySelectorAll(".todo__close-btn").forEach((btn) => {
     btn.addEventListener("click", removeTodo);
@@ -48,6 +45,9 @@ function createTodo(text) {
 
 function handleSubmit(e) {
   e.preventDefault();
+
+  if (controls.text.value.trim() === "") return;
+
   createTodo(
     controls.text.value
       .replace(/</g, "&lt;")
