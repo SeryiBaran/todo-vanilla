@@ -3,7 +3,7 @@ html.optional-rem {
 }
 
 .wrapper {
-  max-width: 100rem;
+  max-width: 40rem;
   margin: 0 auto;
   padding: 1rem;
   text-align: center;
@@ -12,16 +12,21 @@ html.optional-rem {
   gap: 3rem;
 }
 
+button {
+  cursor: pointer;
+}
+
 input:focus,
 button:focus {
-  outline: 0.1rem #8aa1ff solid;
+  box-shadow: 0 0 0.1rem 0.1rem #8aa1ff;
 }
 
 .controls {
   margin: 0 auto;
   display: flex;
-  max-width: 50rem;
+  /* max-width: 50rem; */
   width: 100%;
+  border: 1px solid #777;
 }
 
 .controls__input,
@@ -34,8 +39,24 @@ button:focus {
   background-color: #d6deff;
 }
 
+.controls__input:focus {
+  background-color: #E5EAFF;
+}
+
 .controls__submit-btn {
   background-color: #99adff;
+}
+
+.controls__submit-btn:hover {
+  background-color: #A8B9FF;
+}
+
+.controls__submit-btn:active {
+  background-color: #8099FF;
+}
+
+.controls__submit-btn:focus {
+  box-shadow: none;
 }
 
 .todos {
@@ -51,6 +72,7 @@ button:focus {
   display: flex;
   gap: 1rem;
   flex-direction: column;
+  border: 1px solid #777;
 }
 
 .todo p {
@@ -60,7 +82,6 @@ button:focus {
 .todo__close-btn {
   background-color: #e8e8e8;
   height: 3rem;
-  cursor: pointer;
 }
 
 @media (max-width: 480px) {
