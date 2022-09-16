@@ -1,5 +1,5 @@
 import "./sb.min.css";
-import "./style.css";
+import "./main.scss";
 
 const controls = document.querySelector(".controls");
 const todosContainer = document.querySelector(".todos");
@@ -27,12 +27,12 @@ function renderTodos() {
   todosContainer.innerHTML = "";
   todos.forEach((todo) => {
     todosContainer.insertAdjacentHTML('afterbegin', `<div class="todo" id="${todo[0]}">
-          <button class="todo__close-btn">Удалить</button>
-          <p>${todo[1]}</p>
+          <button class="todo__remove-btn">Удалить</button>
+          <p class="todo__text">${todo[1]}</p>
         </div>`);
   });
 
-  document.querySelectorAll(".todo__close-btn").forEach((btn) => {
+  document.querySelectorAll(".todo__remove-btn").forEach((btn) => {
     btn.addEventListener("click", removeTodo);
   });
 }

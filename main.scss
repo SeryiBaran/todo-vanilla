@@ -1,0 +1,84 @@
+html.optional-rem {
+  font-size: 100%;
+}
+
+.wrapper {
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 1rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+button {
+  cursor: pointer;
+}
+
+input,
+button {
+  &:focus {
+    box-shadow: 0 0 0.1rem 0.1rem #8aa1ff;
+  }
+}
+
+.controls {
+  margin: 0 auto;
+  display: flex;
+  /* max-width: 50rem; */
+  width: 100%;
+  border: 1px solid #777;
+  &__input,
+  &__submit-btn {
+    padding: 1rem;
+  }
+  &__input {
+    width: 100%;
+    background-color: #d6deff;
+    &:focus {
+      background-color: #e5eaff;
+    }
+  }
+  &__submit-btn {
+    background-color: #99adff;
+
+    &:hover {
+      background-color: #a8b9ff;
+    }
+
+    &:active {
+      background-color: #8099ff;
+    }
+
+    &:focus {
+      box-shadow: none;
+    }
+  }
+  @media (max-width: 480px) {
+    flex-direction: column;
+  }
+}
+
+.todos {
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.todo {
+  padding: 1rem;
+  background-color: #d4d4d4;
+  display: flex;
+  gap: 1rem;
+  flex-direction: column;
+  border: 1px solid #777;
+  &__text {
+    word-wrap: break-word;
+  }
+  &__remove-btn {
+    background-color: #e8e8e8;
+    height: 3rem;
+  }
+}
