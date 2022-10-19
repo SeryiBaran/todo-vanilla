@@ -1,63 +1,67 @@
+import { v4 as uuidv4 } from "uuid";
+
 import "./sb.min.css";
 import "./main.scss";
 
 const controls = document.querySelector(".controls");
 const todosContainer = document.querySelector(".todos");
 
-let todos = JSON.parse(localStorage.getItem("todos")) || [];
+const utils = {
+  generateID() {
+    return uuidv4();
+  },
+  protectXSS(content) {
+    return content
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/'/g, "&#39;")
+      .replace(/"/g, "&#34;");
+  },
+};
 
-function generateKey(prefix) {
-  return `TODO_${new Date().getTime()}_${Math.random()}`;
-}
-
-function updateLocalStorage() {
-  localStorage.setItem("todos", JSON.stringify(todos));
-}
-
-function removeTodo(e) {
-  const btn = e.target;
-  const todo = btn.parentNode;
-  const index = todos.map((e) => e[0]).indexOf(todo.id);
-  btn.parentNode.parentNode.removeChild(btn.parentNode);
-  todos.splice(index, 1);
-  updateLocalStorage();
-}
-
-function renderTodos() {
-  todosContainer.innerHTML = "";
-  todos.forEach((todo) => {
-    todosContainer.insertAdjacentHTML('afterbegin', `<div class="todo" id="${todo[0]}">
-          <button class="todo__remove-btn">Удалить</button>
-          <p class="todo__text">${todo[1]}</p>
-        </div>`);
-  });
-
-  document.querySelectorAll(".todo__remove-btn").forEach((btn) => {
-    btn.addEventListener("click", removeTodo);
-  });
-}
-
-function createTodo(text) {
-  todos.push([generateKey(), text]);
-  updateLocalStorage();
-  renderTodos();
-}
+const todosApi = {
+  todos: JSON.parse(localStorage.getItem("todos")) || [],
+  create(data) {
+    this.todos.push({ id: utils.generateID(), ...data });
+    this.handleTodosChange();
+  },
+  remove(id) {
+    this.todos = this.todos.filter((todo) => todo.id !== id);
+    this.handleTodosChange();
+  },
+  handleTodosChange() {
+    this.updateLocalStorage();
+    this.render();
+  },
+  render() {
+    todosContainer.innerHTML = "";
+    this.todos.forEach((todo) => {
+      todosContainer.insertAdjacentHTML(
+        "afterbegin",
+        `<div class="todo" id="${todo.id}">
+          <button class="todo__remove-btn" data-todoid="${todo.id}">Удалить</button>
+          <p class="todo__text">${todo.content}</p>
+        </div>`
+      );
+    });
+    document.querySelectorAll(".todo__remove-btn").forEach((btn) => {
+      btn.addEventListener("click", () => this.remove(btn.dataset.todoid));
+    });
+  },
+  updateLocalStorage() {
+    localStorage.setItem("todos", JSON.stringify(this.todos));
+  },
+};
 
 function handleSubmit(e) {
   e.preventDefault();
 
   if (controls.text.value.trim() === "") return;
 
-  createTodo(
-    controls.text.value
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/'/g, "&#39;")
-      .replace(/"/g, "&#34;")
-  );
+  todosApi.create({ content: utils.protectXSS(controls.text.value) });
   controls.text.value = "";
 }
 
-renderTodos();
+todosApi.render();
 
 controls.addEventListener("submit", handleSubmit);
