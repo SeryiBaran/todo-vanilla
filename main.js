@@ -6,6 +6,8 @@ import "./main.scss";
 const controls = document.querySelector(".controls");
 const todosContainer = document.querySelector(".todos");
 
+const LOCALSTORAGE_KEY = "vanilla-todos";
+
 const utils = {
   generateID() {
     return uuidv4();
@@ -20,7 +22,7 @@ const utils = {
 };
 
 const todosApi = {
-  todos: JSON.parse(localStorage.getItem("todos")) || [],
+  todos: JSON.parse(localStorage.getItem(LOCALSTORAGE_KEY)) || [],
   create(data) {
     this.todos.push({ id: utils.generateID(), ...data });
     this.handleTodosChange();
@@ -49,7 +51,7 @@ const todosApi = {
     });
   },
   updateLocalStorage() {
-    localStorage.setItem("todos", JSON.stringify(this.todos));
+    localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify(this.todos));
   },
 };
 
