@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
+import { BehaviorSubject, filter, map } from "rxjs";
 
 import "./sb.min.css";
 import "./main.scss";
@@ -9,35 +10,30 @@ const todosContainer = document.querySelector(".todos");
 const LOCALSTORAGE_KEY = "vanilla-todos";
 
 const utils = {
-  generateID() {
-    return uuidv4();
-  },
+  generateID: uuidv4,
   protectXSS(content) {
-    return content
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/'/g, "&#39;")
-      .replace(/"/g, "&#34;");
+    return encodeURIComponent(content);
   },
 };
 
+const initialState = JSON.parse(localStorage.getItem(LOCALSTORAGE_KEY)) || [];
+
+let todos = initialState;
+
+const todos$ = new BehaviorSubject(initialState);
+
+const setTodos = (data) => todos$.next(data);
+
 const todosApi = {
-  todos: JSON.parse(localStorage.getItem(LOCALSTORAGE_KEY)) || [],
   create(data) {
-    this.todos.push({ id: utils.generateID(), ...data });
-    this.handleTodosChange();
+    setTodos([...todos, { id: utils.generateID(), ...data }]);
   },
   remove(id) {
-    this.todos = this.todos.filter((todo) => todo.id !== id);
-    this.handleTodosChange();
-  },
-  handleTodosChange() {
-    this.updateLocalStorage();
-    this.render();
+    setTodos(todos.filter((todo) => todo.id !== id));
   },
   render() {
     todosContainer.innerHTML = "";
-    this.todos.forEach((todo) => {
+    todos.forEach((todo) => {
       todosContainer.insertAdjacentHTML(
         "afterbegin",
         `<div class="todo" id="${todo.id}">
@@ -51,9 +47,18 @@ const todosApi = {
     });
   },
   updateLocalStorage() {
-    localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify(this.todos));
+    localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify(todos));
+  },
+  handleTodosChange() {
+    this.updateLocalStorage();
+    this.render();
   },
 };
+
+todos$.subscribe((data) => {
+  todos = data;
+  todosApi.handleTodosChange();
+});
 
 function handleSubmit(e) {
   e.preventDefault();
