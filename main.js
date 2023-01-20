@@ -9,10 +9,26 @@ const todosContainer = document.querySelector(".todos");
 
 const LOCALSTORAGE_KEY = "vanilla-todos";
 
+const xssDictionary = {
+  "<": "&lt;",
+  ">": "&gt;",
+  '"': "&quot;",
+  "'": "&#39;",
+};
+
 const utils = {
   generateID: uuidv4,
-  protectXSS(content) {
-    return encodeURIComponent(content);
+  protectXSS(string) {
+    let newString = string;
+
+    for (let symbol in xssDictionary) {
+      newString = newString.replace(
+        new RegExp(symbol, "g"),
+        xssDictionary[symbol]
+      );
+    }
+
+    return newString;
   },
 };
 
