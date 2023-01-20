@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
-import { BehaviorSubject, filter, map } from "rxjs";
+import { store as createStore } from "./store.js";
 
 import "./sb.min.css";
 import "./main.scss";
@@ -18,22 +18,16 @@ const utils = {
 
 const initialState = JSON.parse(localStorage.getItem(LOCALSTORAGE_KEY)) || [];
 
-let todos = initialState;
-
-const todos$ = new BehaviorSubject(initialState);
-
-const setTodos = (data) => todos$.next(data);
-
 const todosApi = {
   create(data) {
-    setTodos([...todos, { id: utils.generateID(), ...data }]);
+    store.todos.push({ id: utils.generateID(), ...data });
   },
   remove(id) {
-    setTodos(todos.filter((todo) => todo.id !== id));
+    store.todos = store.todos.filter((todo) => todo.id !== id);
   },
   render() {
     todosContainer.innerHTML = "";
-    todos.forEach((todo) => {
+    store.todos.forEach((todo) => {
       todosContainer.insertAdjacentHTML(
         "afterbegin",
         `<div class="todo" id="${todo.id}">
@@ -47,7 +41,7 @@ const todosApi = {
     });
   },
   updateLocalStorage() {
-    localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify(todos));
+    localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify(store.todos));
   },
   handleTodosChange() {
     this.updateLocalStorage();
@@ -55,8 +49,7 @@ const todosApi = {
   },
 };
 
-todos$.subscribe((data) => {
-  todos = data;
+const store = createStore({ todos: initialState }, "todos", () => {
   todosApi.handleTodosChange();
 });
 
